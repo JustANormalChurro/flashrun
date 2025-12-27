@@ -11,6 +11,11 @@ import CreateAnnouncement from './pages/CreateAnnouncement';
 import EditAnnouncement from './pages/EditAnnouncement';
 import TestResults from './pages/TestResults';
 import AssignmentResults from './pages/AssignmentResults';
+import ManageStudents from './pages/ManageStudents';
+import TeacherHelp from './pages/TeacherHelp';
+import StudentDashboard from './pages/StudentDashboard';
+import JoinRoom from './pages/JoinRoom';
+import StudentRoom from './pages/StudentRoom';
 
 
 export const PAGES = {
@@ -27,6 +32,11 @@ export const PAGES = {
     "EditAnnouncement": EditAnnouncement,
     "TestResults": TestResults,
     "AssignmentResults": AssignmentResults,
+    "ManageStudents": ManageStudents,
+    "TeacherHelp": TeacherHelp,
+    "StudentDashboard": StudentDashboard,
+    "JoinRoom": JoinRoom,
+    "StudentRoom": StudentRoom,
 }
 
 export const pagesConfig = {
