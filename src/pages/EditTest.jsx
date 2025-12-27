@@ -83,6 +83,25 @@ export default function EditTest() {
     }
 
     await base44.entities.Test.update(testId, updateData);
+
+    // Send notifications if publishing
+    if (publish === true && !test.is_published) {
+      const memberships = await base44.entities.RoomMembership.filter({ room_id: test.room_id });
+      const students = memberships.filter(m => m.role === 'student');
+      
+      for (const student of students) {
+        await base44.entities.Notification.create({
+          user_id: student.user_id,
+          type: 'test',
+          room_id: test.room_id,
+          room_name: room.name,
+          content_id: testId,
+          title: form.title,
+          message: 'New test available'
+        });
+      }
+    }
+
     window.location.href = createPageUrl('RoomDetail') + '?id=' + test.room_id;
   };
 

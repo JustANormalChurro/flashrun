@@ -47,7 +47,7 @@ export default function CreateAnnouncement() {
     }
     
     setSaving(true);
-    await base44.entities.Announcement.create({
+    const announcement = await base44.entities.Announcement.create({
       room_id: roomId,
       title: form.title,
       content: form.content,
@@ -58,6 +58,22 @@ export default function CreateAnnouncement() {
       likes: [],
       comments: []
     });
+
+    // Send notifications to all students in the room
+    const memberships = await base44.entities.RoomMembership.filter({ room_id: roomId });
+    const students = memberships.filter(m => m.role === 'student');
+    
+    for (const student of students) {
+      await base44.entities.Notification.create({
+        user_id: student.user_id,
+        type: 'announcement',
+        room_id: roomId,
+        room_name: room.name,
+        content_id: announcement.id,
+        title: form.title,
+        message: 'New announcement posted'
+      });
+    }
     
     window.location.href = createPageUrl('RoomDetail') + '?id=' + roomId;
   };

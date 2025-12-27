@@ -74,6 +74,25 @@ export default function EditAssignment() {
     }
 
     await base44.entities.Assignment.update(assignmentId, updateData);
+
+    // Send notifications if publishing
+    if (publish === true && !assignment.is_published) {
+      const memberships = await base44.entities.RoomMembership.filter({ room_id: assignment.room_id });
+      const students = memberships.filter(m => m.role === 'student');
+      
+      for (const student of students) {
+        await base44.entities.Notification.create({
+          user_id: student.user_id,
+          type: 'assignment',
+          room_id: assignment.room_id,
+          room_name: room.name,
+          content_id: assignmentId,
+          title: form.title,
+          message: 'New assignment available'
+        });
+      }
+    }
+
     window.location.href = createPageUrl('RoomDetail') + '?id=' + assignment.room_id;
   };
 

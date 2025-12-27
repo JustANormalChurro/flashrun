@@ -44,7 +44,7 @@ export default function CreateAssignment() {
     }
     
     setSaving(true);
-    await base44.entities.Assignment.create({
+    const assignment = await base44.entities.Assignment.create({
       room_id: roomId,
       title: form.title,
       description: form.description,
@@ -53,6 +53,24 @@ export default function CreateAssignment() {
       due_date: form.due_date || null,
       is_published: publish
     });
+
+    // Send notifications to students if published
+    if (publish) {
+      const memberships = await base44.entities.RoomMembership.filter({ room_id: roomId });
+      const students = memberships.filter(m => m.role === 'student');
+      
+      for (const student of students) {
+        await base44.entities.Notification.create({
+          user_id: student.user_id,
+          type: 'assignment',
+          room_id: roomId,
+          room_name: room.name,
+          content_id: assignment.id,
+          title: form.title,
+          message: 'New assignment available'
+        });
+      }
+    }
     
     window.location.href = createPageUrl('RoomDetail') + '?id=' + roomId;
   };

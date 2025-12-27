@@ -47,7 +47,7 @@ export default function CreateTest() {
     }
     
     setSaving(true);
-    await base44.entities.Test.create({
+    const test = await base44.entities.Test.create({
       room_id: roomId,
       title: form.title,
       description: form.description,
@@ -59,6 +59,24 @@ export default function CreateTest() {
       time_limit_minutes: form.time_limit_minutes ? parseInt(form.time_limit_minutes) : null,
       is_published: publish
     });
+
+    // Send notifications to students if published
+    if (publish) {
+      const memberships = await base44.entities.RoomMembership.filter({ room_id: roomId });
+      const students = memberships.filter(m => m.role === 'student');
+      
+      for (const student of students) {
+        await base44.entities.Notification.create({
+          user_id: student.user_id,
+          type: 'test',
+          room_id: roomId,
+          room_name: room.name,
+          content_id: test.id,
+          title: form.title,
+          message: 'New test available'
+        });
+      }
+    }
     
     window.location.href = createPageUrl('RoomDetail') + '?id=' + roomId;
   };
