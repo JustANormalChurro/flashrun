@@ -24,6 +24,9 @@ import Home from './pages/Home';
 import StudentVerification from './pages/StudentVerification';
 import Orvit from './pages/Orvit';
 import OrbitRooms from './pages/OrbitRooms';
+import ChatRoom from './pages/ChatRoom';
+import FlashSprint from './pages/FlashSprint';
+import DirectMessages from './pages/DirectMessages';
 import __Layout from './Layout.jsx';
 
 
@@ -54,6 +57,9 @@ export const PAGES = {
     "StudentVerification": StudentVerification,
     "Orvit": Orvit,
     "OrbitRooms": OrbitRooms,
+    "ChatRoom": ChatRoom,
+    "FlashSprint": FlashSprint,
+    "DirectMessages": DirectMessages,
 }
 
 export const pagesConfig = {
