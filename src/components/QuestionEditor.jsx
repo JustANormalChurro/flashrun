@@ -202,12 +202,60 @@ export default function QuestionEditor({
               )}
 
               {q.question_type === 'short_answer' && (
-                <RetroInput
-                  label="Expected Answer (for auto-grading)"
-                  value={q.correct_answer}
-                  onChange={(v) => updateQuestion(index, 'correct_answer', v)}
-                  placeholder="Enter the expected answer..."
-                />
+                <>
+                  <RetroInput
+                    label="Primary Answer (100% credit)"
+                    value={q.correct_answer}
+                    onChange={(v) => updateQuestion(index, 'correct_answer', v)}
+                    placeholder="Enter the primary correct answer..."
+                  />
+                  
+                  <div style={{ marginTop: '10px' }}>
+                    <div style={{ fontWeight: 'bold', fontSize: '11px', marginBottom: '5px' }}>
+                      Similar Keywords (Partial Credit):
+                    </div>
+                    <div style={{ fontSize: '10px', color: '#666', marginBottom: '5px', fontStyle: 'italic' }}>
+                      Add alternate answers with partial credit (for misspellings or similar answers)
+                    </div>
+                    {(q.similar_keywords || []).map((kw, kwIndex) => (
+                      <div key={kwIndex} style={{ display: 'flex', gap: '5px', marginBottom: '5px', alignItems: 'center' }}>
+                        <input
+                          type="text"
+                          value={kw.keyword || ''}
+                          onChange={(e) => {
+                            const keywords = [...(q.similar_keywords || [])];
+                            keywords[kwIndex] = { ...keywords[kwIndex], keyword: e.target.value };
+                            updateQuestion(index, 'similar_keywords', keywords);
+                          }}
+                          placeholder="Alternate answer"
+                          style={{ flex: 1, padding: '3px 6px', border: '1px solid #999999', fontSize: '11px' }}
+                        />
+                        <input
+                          type="text"
+                          value={kw.credit || ''}
+                          onChange={(e) => {
+                            const keywords = [...(q.similar_keywords || [])];
+                            keywords[kwIndex] = { ...keywords[kwIndex], credit: e.target.value };
+                            updateQuestion(index, 'similar_keywords', keywords);
+                          }}
+                          placeholder="Credit (e.g., 2/5 or 40%)"
+                          style={{ width: '120px', padding: '3px 6px', border: '1px solid #999999', fontSize: '11px' }}
+                        />
+                        <a href="#" onClick={(e) => {
+                          e.preventDefault();
+                          const keywords = (q.similar_keywords || []).filter((_, i) => i !== kwIndex);
+                          updateQuestion(index, 'similar_keywords', keywords);
+                        }} style={{ color: '#cc0000', fontSize: '10px' }}>Remove</a>
+                      </div>
+                    ))}
+                    <RetroButton onClick={() => {
+                      const keywords = [...(q.similar_keywords || []), { keyword: '', credit: '' }];
+                      updateQuestion(index, 'similar_keywords', keywords);
+                    }} variant="secondary" style={{ padding: '2px 8px', fontSize: '10px', marginTop: '5px' }}>
+                      + Add Similar Keyword
+                    </RetroButton>
+                  </div>
+                </>
               )}
 
               {q.question_type === 'essay' && (

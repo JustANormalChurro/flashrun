@@ -5,6 +5,7 @@ import RetroHeader from '@/components/RetroHeader';
 import RetroButton from '@/components/RetroButton';
 import RetroTable from '@/components/RetroTable';
 import { RetroInput, RetroTextarea } from '@/components/RetroInput';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function OrbitRooms() {
   const [user, setUser] = useState(null);
@@ -96,7 +97,7 @@ export default function OrbitRooms() {
   };
 
   if (loading) {
-    return <div style={{ padding: '20px' }}>Loading...</div>;
+    return <LoadingSpinner message="Loading Orvit Rooms" />;
   }
 
   const myRoomRows = myRooms.map(r => ({

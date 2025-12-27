@@ -5,6 +5,7 @@ import RetroHeader from '@/components/RetroHeader';
 import RetroButton from '@/components/RetroButton';
 import RetroTable from '@/components/RetroTable';
 import { RetroInput, RetroTextarea } from '@/components/RetroInput';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function DirectMessages() {
   const [user, setUser] = useState(null);
@@ -130,7 +131,7 @@ export default function DirectMessages() {
   };
 
   if (!user) {
-    return <div style={{ padding: '20px' }}>Loading...</div>;
+    return <LoadingSpinner message="Loading Messages" />;
   }
 
   const convoRows = conversations.map(c => ({
