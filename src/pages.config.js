@@ -7,6 +7,10 @@ import CreateTest from './pages/CreateTest';
 import EditTest from './pages/EditTest';
 import CreateAssignment from './pages/CreateAssignment';
 import EditAssignment from './pages/EditAssignment';
+import CreateAnnouncement from './pages/CreateAnnouncement';
+import EditAnnouncement from './pages/EditAnnouncement';
+import TestResults from './pages/TestResults';
+import AssignmentResults from './pages/AssignmentResults';
 
 
 export const PAGES = {
@@ -19,6 +23,10 @@ export const PAGES = {
     "EditTest": EditTest,
     "CreateAssignment": CreateAssignment,
     "EditAssignment": EditAssignment,
+    "CreateAnnouncement": CreateAnnouncement,
+    "EditAnnouncement": EditAnnouncement,
+    "TestResults": TestResults,
+    "AssignmentResults": AssignmentResults,
 }
 
 export const pagesConfig = {
