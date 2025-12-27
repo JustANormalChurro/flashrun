@@ -2,7 +2,7 @@ import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 
-export default function RetroHeader({ user, title = "EduTest Secure Testing Browser" }) {
+export default function RetroHeader({ user, title = "FlashRun Secure Testing Browser" }) {
   const handleLogout = () => {
     base44.auth.logout(createPageUrl('Login'));
   };

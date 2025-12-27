@@ -280,7 +280,7 @@ export default function TakeTest() {
   return (
     <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
       <div style={{ backgroundColor: '#003366', color: 'white', padding: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span><strong>EduTest</strong> - {test?.title}</span>
+        <span><strong>FlashRun</strong> - {test?.title}</span>
         <span>
           Question {currentQuestionIndex + 1} of {questions.length}
           {timeRemaining !== null && (

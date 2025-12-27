@@ -155,7 +155,7 @@ export default function TeacherDashboard() {
                 </div>
 
                 <div style={{ backgroundColor: '#ffffcc', border: '1px solid #cccc00', padding: '10px', fontSize: '11px' }}>
-                  <strong>System Notice:</strong> EduTest v2.1.4 - All tests are automatically saved and logged.
+                  <strong>System Notice:</strong> FlashRun v2.1.4 - All tests are automatically saved and logged.
                 </div>
               </td>
             </tr>
@@ -201,7 +201,7 @@ export default function TeacherDashboard() {
       </div>
 
       <div style={{ borderTop: '1px solid #999999', padding: '10px', textAlign: 'center', fontSize: '10px', color: '#666666', backgroundColor: '#e0e0e0' }}>
-        EduTest Secure Testing Browser v2.1.4 | District Technology Services | &copy; 2009
+        FlashRun Secure Testing Browser v2.1.4 | District Technology Services | &copy; 2009
       </div>
     </div>
   );

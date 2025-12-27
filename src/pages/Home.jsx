@@ -64,7 +64,7 @@ export default function Home() {
           <tbody>
             <tr>
               <td style={{ color: 'white', fontWeight: 'bold', fontSize: '16px' }}>
-                EduTest Secure Testing Browser
+                FlashRun Secure Testing Browser
               </td>
               <td style={{ textAlign: 'right' }}>
                 <RetroButton onClick={handleLogin} style={{ padding: '5px 20px' }}>
@@ -99,11 +99,11 @@ export default function Home() {
             fontWeight: 'bold',
             fontSize: '14px'
           }}>
-            Welcome to EduTest
+            Welcome to FlashRun
           </div>
           <div style={{ padding: '20px' }}>
             <p style={{ marginBottom: '15px', lineHeight: '1.6' }}>
-              EduTest Secure Testing Browser is the district's official platform for online assessments, 
+              FlashRun Secure Testing Browser is the district's official platform for online assessments, 
               homework assignments, and classroom communication.
             </p>
             
@@ -186,7 +186,7 @@ export default function Home() {
         left: 0,
         right: 0
       }}>
-        EduTest Secure Testing Browser v2.1.4 | District Technology Services | &copy; 2009 | 
+        FlashRun Secure Testing Browser v2.1.4 | District Technology Services | &copy; 2009 | 
         <a href="#" style={{ color: '#003366', marginLeft: '10px' }}>Privacy Policy</a> | 
         <a href="#" style={{ color: '#003366', marginLeft: '10px' }}>Terms of Use</a> | 
         <a href="#" style={{ color: '#003366', marginLeft: '10px' }}>Acceptable Use Policy</a>

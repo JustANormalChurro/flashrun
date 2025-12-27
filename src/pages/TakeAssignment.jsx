@@ -195,7 +195,7 @@ export default function TakeAssignment() {
   return (
     <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
       <div style={{ backgroundColor: '#003366', color: 'white', padding: '10px', display: 'flex', justifyContent: 'space-between' }}>
-        <span><strong>EduTest</strong> - {assignment?.title}</span>
+        <span><strong>FlashRun</strong> - {assignment?.title}</span>
         <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
       </div>
 
