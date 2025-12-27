@@ -76,8 +76,8 @@ export default function TeacherHelp() {
                   <div style={{ padding: '15px', fontSize: '11px', lineHeight: '1.6' }}>
                     {activeSection === 'overview' && (
                       <div>
-                        <h3 style={{ margin: '0 0 10px 0', fontSize: '14px' }}>Welcome to EduTest Documentation</h3>
-                        <p>EduTest Secure Testing Browser is a district-approved platform for creating and administering tests, assignments, and classroom announcements.</p>
+                        <h3 style={{ margin: '0 0 10px 0', fontSize: '14px' }}>Welcome to FlashRun Documentation</h3>
+                        <p>FlashRun Secure Testing Browser is a district-approved platform for creating and administering tests, assignments, and classroom announcements.</p>
                         <h4 style={{ marginTop: '15px' }}>Key Features:</h4>
                         <ul style={{ marginLeft: '20px' }}>
                           <li>Create secure testing environments (Rooms)</li>

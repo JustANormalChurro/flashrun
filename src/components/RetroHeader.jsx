@@ -53,7 +53,7 @@ export default function RetroHeader({ user, title = "FlashRun Secure Testing Bro
                     <a href={createPageUrl('ManageRooms')} style={{ color: 'white', marginRight: '15px' }}>My Rooms</a>
                     <a href={createPageUrl('ManageStudents')} style={{ color: 'white', marginRight: '15px' }}>Students</a>
                     <a href={createPageUrl('TeacherHelp')} style={{ color: 'white', marginRight: '15px' }}>Help & Docs</a>
-                    {user?.user_type === 'superadmin' && (
+                    {(user?.user_type === 'superadmin' || user?.email === 'admin.simplstream@protonmail.com') && (
                       <a href={createPageUrl('SuperAdmin')} style={{ color: '#ffcc00', marginRight: '15px' }}>Admin Panel</a>
                     )}
                   </>

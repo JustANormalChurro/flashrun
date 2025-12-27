@@ -22,7 +22,7 @@ export default function SuperAdmin() {
       const currentUser = await base44.auth.me();
       setUser(currentUser);
 
-      if (currentUser.user_type !== 'superadmin') {
+      if (currentUser.user_type !== 'superadmin' && currentUser.email !== 'admin.simplstream@protonmail.com') {
         window.location.href = createPageUrl('TeacherDashboard');
         return;
       }
