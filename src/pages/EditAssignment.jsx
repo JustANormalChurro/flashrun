@@ -5,6 +5,7 @@ import RetroHeader from '@/components/RetroHeader';
 import RetroButton from '@/components/RetroButton';
 import { RetroInput, RetroTextarea, RetroCheckbox } from '@/components/RetroInput';
 import QuestionEditor from '@/components/QuestionEditor';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function EditAssignment() {
   const [user, setUser] = useState(null);
@@ -97,11 +98,7 @@ export default function EditAssignment() {
   };
 
   if (loading) {
-    return (
-      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-        <p style={{ padding: '20px' }}>Loading...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading Assignment" />;
   }
 
   return (

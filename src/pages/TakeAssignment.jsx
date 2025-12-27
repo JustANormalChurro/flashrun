@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import RetroHeader from '@/components/RetroHeader';
 import RetroButton from '@/components/RetroButton';
 import { RetroTextarea } from '@/components/RetroInput';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function TakeAssignment() {
   const [user, setUser] = useState(null);
@@ -114,11 +115,7 @@ export default function TakeAssignment() {
   };
 
   if (loading) {
-    return (
-      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-        <p style={{ padding: '20px' }}>Loading...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading Assignment" />;
   }
 
   if (submitted) {
