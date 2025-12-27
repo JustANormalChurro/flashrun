@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import RetroHeader from '@/components/RetroHeader';
 import RetroTable from '@/components/RetroTable';
 import RetroButton from '@/components/RetroButton';
-import { RetroSelect } from '@/components/RetroInput';
+import { RetroSelect, RetroInput } from '@/components/RetroInput';
 
 export default function SuperAdmin() {
   const [user, setUser] = useState(null);
@@ -12,6 +12,8 @@ export default function SuperAdmin() {
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [showAddStudent, setShowAddStudent] = useState(false);
+  const [newStudent, setNewStudent] = useState({ designated_name: '', student_id: '' });
 
   useEffect(() => {
     loadData();
@@ -54,6 +56,40 @@ export default function SuperAdmin() {
     if (!window.confirm('Are you sure you want to permanently delete this account? This action cannot be undone.')) return;
     await base44.entities.User.delete(userId);
     loadData();
+  };
+
+  const generateSecureId = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+    let id = '';
+    for (let i = 0; i < 15; i++) {
+      id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+  };
+
+  const handleAddDesignatedStudent = async () => {
+    if (!newStudent.designated_name || !newStudent.student_id) {
+      alert('Please fill in both name and student ID');
+      return;
+    }
+    
+    const existing = users.find(u => u.student_id === newStudent.student_id);
+    if (existing) {
+      alert('Student ID already exists');
+      return;
+    }
+
+    const designation = {
+      designated_name: newStudent.designated_name,
+      student_id: newStudent.student_id,
+      created_by_admin: user.email,
+      created_at: new Date().toISOString()
+    };
+    
+    alert(`Designated Student Created:\n\nName: ${designation.designated_name}\nStudent ID: ${designation.student_id}\n\nThis student must verify with these credentials when they first sign in.`);
+    
+    setNewStudent({ designated_name: '', student_id: '' });
+    setShowAddStudent(false);
   };
 
   if (loading) {
@@ -126,6 +162,49 @@ export default function SuperAdmin() {
       <div style={{ padding: '15px' }}>
         <div style={{ backgroundColor: '#ffcccc', border: '1px solid #cc0000', padding: '10px', marginBottom: '15px', fontSize: '11px' }}>
           <strong>SuperAdmin Panel</strong> - You have elevated privileges. Changes made here affect all users.
+        </div>
+
+        <div style={{ backgroundColor: 'white', border: '1px solid #999999', marginBottom: '15px' }}>
+          <div style={{ backgroundColor: '#cc0000', color: 'white', padding: '8px', fontWeight: 'bold', fontSize: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>Designated Students</span>
+            <RetroButton onClick={() => setShowAddStudent(!showAddStudent)} variant="secondary" style={{ padding: '3px 10px' }}>
+              + Create Student Designation
+            </RetroButton>
+          </div>
+          {showAddStudent && (
+            <div style={{ padding: '15px', backgroundColor: '#ffffee', borderBottom: '1px solid #cccc00' }}>
+              <RetroInput
+                label="Student Name"
+                value={newStudent.designated_name}
+                onChange={(v) => setNewStudent({ ...newStudent, designated_name: v })}
+                placeholder="Full name as it should appear"
+              />
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
+                <div style={{ flex: 1 }}>
+                  <RetroInput
+                    label="Student ID (15 characters secure)"
+                    value={newStudent.student_id}
+                    onChange={(v) => setNewStudent({ ...newStudent, student_id: v })}
+                    placeholder="e.g., Xk9#mP2$vN7!Qr3"
+                  />
+                </div>
+                <RetroButton onClick={() => setNewStudent({ ...newStudent, student_id: generateSecureId() })} variant="secondary">
+                  Generate
+                </RetroButton>
+              </div>
+              <div style={{ marginTop: '10px' }}>
+                <RetroButton onClick={handleAddDesignatedStudent}>
+                  Create Designation
+                </RetroButton>
+                <RetroButton onClick={() => { setShowAddStudent(false); setNewStudent({ designated_name: '', student_id: '' }); }} variant="secondary" style={{ marginLeft: '10px' }}>
+                  Cancel
+                </RetroButton>
+              </div>
+              <div style={{ marginTop: '10px', fontSize: '10px', color: '#666' }}>
+                Note: Student must verify with this name and ID on first sign in. Store this information securely.
+              </div>
+            </div>
+          )}
         </div>
 
         <div style={{ backgroundColor: 'white', border: '1px solid #999999' }}>

@@ -133,12 +133,20 @@ export default function TakeAssignment() {
             <div style={{ backgroundColor: '#ccffcc', border: '1px solid #00cc00', padding: '15px', marginBottom: '20px' }}>
               <h3 style={{ margin: '0' }}>Assignment Submitted!</h3>
             </div>
-            <p style={{ fontSize: '16px' }}>
-              <strong>Auto-Graded Score:</strong> {score} / {autoGradable}
-            </p>
-            {hasEssays && (
-              <p style={{ fontSize: '12px', color: '#666666', marginTop: '10px' }}>
-                Essay questions will be graded by your teacher.
+            {assignment?.show_score_to_student ? (
+              <>
+                <p style={{ fontSize: '16px' }}>
+                  <strong>Auto-Graded Score:</strong> {score} / {autoGradable}
+                </p>
+                {hasEssays && (
+                  <p style={{ fontSize: '12px', color: '#666666', marginTop: '10px' }}>
+                    Essay questions will be graded by your teacher.
+                  </p>
+                )}
+              </>
+            ) : (
+              <p style={{ fontSize: '13px', color: '#666666' }}>
+                Your assignment has been submitted. Your teacher will review and provide your score.
               </p>
             )}
             <div style={{ marginTop: '20px' }}>

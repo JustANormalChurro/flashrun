@@ -21,6 +21,7 @@ import TakeAssignment from './pages/TakeAssignment';
 import StudentHistory from './pages/StudentHistory';
 import SuperAdmin from './pages/SuperAdmin';
 import Home from './pages/Home';
+import StudentVerification from './pages/StudentVerification';
 import __Layout from './Layout.jsx';
 
 
@@ -48,6 +49,7 @@ export const PAGES = {
     "StudentHistory": StudentHistory,
     "SuperAdmin": SuperAdmin,
     "Home": Home,
+    "StudentVerification": StudentVerification,
 }
 
 export const pagesConfig = {

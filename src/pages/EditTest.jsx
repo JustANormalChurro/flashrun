@@ -19,7 +19,8 @@ export default function EditTest() {
     save_progress: true,
     require_access_code: false,
     access_code: '',
-    time_limit_minutes: ''
+    time_limit_minutes: '',
+    show_score_to_student: true
   });
   const [questions, setQuestions] = useState([]);
 
@@ -46,7 +47,8 @@ export default function EditTest() {
           save_progress: t.save_progress !== false,
           require_access_code: t.require_access_code || false,
           access_code: t.access_code || '',
-          time_limit_minutes: t.time_limit_minutes || ''
+          time_limit_minutes: t.time_limit_minutes || '',
+          show_score_to_student: t.show_score_to_student !== false
         });
         setQuestions(t.questions || []);
 
@@ -72,7 +74,8 @@ export default function EditTest() {
       save_progress: form.save_progress,
       require_access_code: form.require_access_code,
       access_code: form.access_code,
-      time_limit_minutes: form.time_limit_minutes ? parseInt(form.time_limit_minutes) : null
+      time_limit_minutes: form.time_limit_minutes ? parseInt(form.time_limit_minutes) : null,
+      show_score_to_student: form.show_score_to_student
     };
     
     if (publish !== null) {
@@ -170,6 +173,11 @@ export default function EditTest() {
                       label="Save progress if student exits"
                       checked={form.save_progress}
                       onChange={(v) => setForm({ ...form, save_progress: v })}
+                    />
+                    <RetroCheckbox
+                      label="Show score to student after submission"
+                      checked={form.show_score_to_student}
+                      onChange={(v) => setForm({ ...form, show_score_to_student: v })}
                     />
                     <RetroCheckbox
                       label="Require access code"

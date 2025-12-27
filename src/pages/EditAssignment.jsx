@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import RetroHeader from '@/components/RetroHeader';
 import RetroButton from '@/components/RetroButton';
-import { RetroInput, RetroTextarea } from '@/components/RetroInput';
+import { RetroInput, RetroTextarea, RetroCheckbox } from '@/components/RetroInput';
 import QuestionEditor from '@/components/QuestionEditor';
 
 export default function EditAssignment() {
@@ -16,7 +16,8 @@ export default function EditAssignment() {
     title: '',
     description: '',
     max_attempts: 1,
-    due_date: ''
+    due_date: '',
+    show_score_to_student: true
   });
   const [questions, setQuestions] = useState([]);
 
@@ -40,7 +41,8 @@ export default function EditAssignment() {
           title: a.title || '',
           description: a.description || '',
           max_attempts: a.max_attempts || 1,
-          due_date: a.due_date ? a.due_date.slice(0, 16) : ''
+          due_date: a.due_date ? a.due_date.slice(0, 16) : '',
+          show_score_to_student: a.show_score_to_student !== false
         });
         setQuestions(a.questions || []);
 
@@ -63,7 +65,8 @@ export default function EditAssignment() {
       description: form.description,
       questions: questions,
       max_attempts: parseInt(form.max_attempts) || 1,
-      due_date: form.due_date || null
+      due_date: form.due_date || null,
+      show_score_to_student: form.show_score_to_student
     };
     
     if (publish !== null) {
@@ -122,6 +125,11 @@ export default function EditAssignment() {
                       value={form.due_date}
                       onChange={(v) => setForm({ ...form, due_date: v })}
                       type="datetime-local"
+                    />
+                    <RetroCheckbox
+                      label="Show score to student after submission"
+                      checked={form.show_score_to_student}
+                      onChange={(v) => setForm({ ...form, show_score_to_student: v })}
                     />
                   </td>
                 </tr>

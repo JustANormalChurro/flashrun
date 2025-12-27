@@ -181,10 +181,17 @@ export default function TakeTest() {
           <div style={{ backgroundColor: 'white', border: '1px solid #999999', padding: '20px' }}>
             <h3 style={{ margin: '0 0 15px 0' }}>Test Already Completed</h3>
             <p>You have already completed this test.</p>
-            <p style={{ marginTop: '10px' }}>
-              <strong>Your Score:</strong> {existingSubmission.score} / {existingSubmission.total_questions}
-              ({Math.round((existingSubmission.score / existingSubmission.total_questions) * 100)}%)
-            </p>
+            {test?.show_score_to_student && (
+              <p style={{ marginTop: '10px' }}>
+                <strong>Your Score:</strong> {existingSubmission.score} / {existingSubmission.total_questions}
+                ({Math.round((existingSubmission.score / existingSubmission.total_questions) * 100)}%)
+              </p>
+            )}
+            {!test?.show_score_to_student && (
+              <p style={{ marginTop: '10px', fontSize: '11px', color: '#666666' }}>
+                Your score is being reviewed by your teacher.
+              </p>
+            )}
             <div style={{ marginTop: '20px' }}>
               <RetroButton onClick={() => window.location.href = createPageUrl('StudentRoom') + '?id=' + test.room_id}>
                 Back to Class
@@ -205,12 +212,20 @@ export default function TakeTest() {
             <div style={{ backgroundColor: '#ccffcc', border: '1px solid #00cc00', padding: '15px', marginBottom: '20px' }}>
               <h3 style={{ margin: '0' }}>Test Submitted Successfully!</h3>
             </div>
-            <p style={{ fontSize: '18px' }}>
-              <strong>Your Score:</strong> {score} / {questions.length}
-            </p>
-            <p style={{ fontSize: '14px', color: '#666666' }}>
-              {Math.round((score / questions.length) * 100)}%
-            </p>
+            {test?.show_score_to_student ? (
+              <>
+                <p style={{ fontSize: '18px' }}>
+                  <strong>Your Score:</strong> {score} / {questions.length}
+                </p>
+                <p style={{ fontSize: '14px', color: '#666666' }}>
+                  {Math.round((score / questions.length) * 100)}%
+                </p>
+              </>
+            ) : (
+              <p style={{ fontSize: '13px', color: '#666666' }}>
+                Your test has been submitted. Your teacher will review and provide your score.
+              </p>
+            )}
             <div style={{ marginTop: '20px' }}>
               <RetroButton onClick={() => window.location.href = createPageUrl('StudentRoom') + '?id=' + test.room_id}>
                 Back to Class
