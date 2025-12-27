@@ -268,9 +268,51 @@ export default function QuestionEditor({
         </div>
       ))}
 
-      <RetroButton onClick={addQuestion}>
-        + Add Question
-      </RetroButton>
+      {questionTypes.length > 1 ? (
+        <div>
+          <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', fontSize: '11px' }}>
+            Add Question Type:
+          </label>
+          <select
+            onChange={(e) => {
+              if (e.target.value) {
+                const newQ = {
+                  id: 'q_' + Date.now(),
+                  question_text: '',
+                  question_type: e.target.value,
+                  choices: e.target.value === 'multiple_choice' || e.target.value === 'checkbox' ? ['', '', '', ''] : [],
+                  correct_answer: '',
+                  correct_answers: [],
+                  match_pairs: [],
+                  image_url: '',
+                  video_url: ''
+                };
+                setQuestions([...questions, newQ]);
+                setEditingIndex(questions.length);
+                e.target.value = '';
+              }
+            }}
+            style={{
+              padding: '5px 10px',
+              border: '1px solid #999999',
+              fontFamily: 'Tahoma, Arial, sans-serif',
+              fontSize: '11px',
+              backgroundColor: 'white',
+              cursor: 'pointer'
+            }}
+            defaultValue=""
+          >
+            <option value="" disabled>+ Add Question</option>
+            {questionTypes.map(t => (
+              <option key={t} value={t}>{typeLabels[t]}</option>
+            ))}
+          </select>
+        </div>
+      ) : (
+        <RetroButton onClick={addQuestion}>
+          + Add Question
+        </RetroButton>
+      )}
     </div>
   );
 }

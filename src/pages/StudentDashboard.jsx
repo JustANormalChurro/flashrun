@@ -47,11 +47,7 @@ export default function StudentDashboard() {
   };
 
   if (loading) {
-    return (
-      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-        <p style={{ padding: '20px' }}>Loading...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading Dashboard" />;
   }
 
   const roomRows = rooms.map(room => ({

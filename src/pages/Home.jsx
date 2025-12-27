@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import RetroButton from '@/components/RetroButton';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function Home() {
   const [checking, setChecking] = useState(true);
@@ -33,19 +34,7 @@ export default function Home() {
   };
 
   if (checking) {
-    return (
-      <div style={{
-        fontFamily: 'Tahoma, Arial, sans-serif',
-        fontSize: '12px',
-        backgroundColor: '#f0f0f0',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <p>Loading...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading FlashRun" />;
   }
 
   return (
@@ -186,7 +175,7 @@ export default function Home() {
         left: 0,
         right: 0
       }}>
-        FlashRun Secure Testing Browser v2.1.4 | District Technology Services | &copy; 2009 | 
+        FlashRun Secure Testing Browser v2.1.4 | District Technology Services | &copy; 2025 | Created 2008 | 
         <a href="#" style={{ color: '#003366', marginLeft: '10px' }}>Privacy Policy</a> | 
         <a href="#" style={{ color: '#003366', marginLeft: '10px' }}>Terms of Use</a> | 
         <a href="#" style={{ color: '#003366', marginLeft: '10px' }}>Acceptable Use Policy</a>
