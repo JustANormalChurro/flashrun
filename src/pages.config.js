@@ -20,6 +20,8 @@ import TakeTest from './pages/TakeTest';
 import TakeAssignment from './pages/TakeAssignment';
 import StudentHistory from './pages/StudentHistory';
 import SuperAdmin from './pages/SuperAdmin';
+import Home from './pages/Home';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -45,9 +47,11 @@ export const PAGES = {
     "TakeAssignment": TakeAssignment,
     "StudentHistory": StudentHistory,
     "SuperAdmin": SuperAdmin,
+    "Home": Home,
 }
 
 export const pagesConfig = {
     mainPage: "AuthRedirect",
     Pages: PAGES,
+    Layout: __Layout,
 };
