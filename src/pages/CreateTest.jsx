@@ -18,7 +18,8 @@ export default function CreateTest() {
     save_progress: true,
     require_access_code: false,
     access_code: '',
-    time_limit_minutes: ''
+    time_limit_minutes: '',
+    show_score_to_student: true
   });
   const [questions, setQuestions] = useState([]);
 
@@ -57,6 +58,7 @@ export default function CreateTest() {
       require_access_code: form.require_access_code,
       access_code: form.access_code,
       time_limit_minutes: form.time_limit_minutes ? parseInt(form.time_limit_minutes) : null,
+      show_score_to_student: form.show_score_to_student,
       is_published: publish
     });
 
@@ -184,6 +186,11 @@ export default function CreateTest() {
                         placeholder="Enter access code"
                       />
                     )}
+                    <RetroCheckbox
+                      label="Hide score from students after completion"
+                      checked={!form.show_score_to_student}
+                      onChange={(v) => setForm({ ...form, show_score_to_student: !v })}
+                    />
                   </td>
                 </tr>
               </tbody>

@@ -27,6 +27,7 @@ import OrbitRooms from './pages/OrbitRooms';
 import ChatRoom from './pages/ChatRoom';
 import FlashSprint from './pages/FlashSprint';
 import DirectMessages from './pages/DirectMessages';
+import AITestReview from './pages/AITestReview';
 import __Layout from './Layout.jsx';
 
 
@@ -60,6 +61,7 @@ export const PAGES = {
     "ChatRoom": ChatRoom,
     "FlashSprint": FlashSprint,
     "DirectMessages": DirectMessages,
+    "AITestReview": AITestReview,
 }
 
 export const pagesConfig = {

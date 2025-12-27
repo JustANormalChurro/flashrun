@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import RetroHeader from '@/components/RetroHeader';
 import RetroButton from '@/components/RetroButton';
-import { RetroInput, RetroTextarea } from '@/components/RetroInput';
+import { RetroInput, RetroTextarea, RetroCheckbox } from '@/components/RetroInput';
 import QuestionEditor from '@/components/QuestionEditor';
 
 export default function CreateAssignment() {
@@ -15,7 +15,8 @@ export default function CreateAssignment() {
     title: '',
     description: '',
     max_attempts: 1,
-    due_date: ''
+    due_date: '',
+    show_score_to_student: true
   });
   const [questions, setQuestions] = useState([]);
 
@@ -51,6 +52,7 @@ export default function CreateAssignment() {
       questions: questions,
       max_attempts: parseInt(form.max_attempts) || 1,
       due_date: form.due_date || null,
+      show_score_to_student: form.show_score_to_student,
       is_published: publish
     });
 
@@ -125,6 +127,13 @@ export default function CreateAssignment() {
                       onChange={(v) => setForm({ ...form, due_date: v })}
                       type="datetime-local"
                     />
+                    <div style={{ marginTop: '10px' }}>
+                      <RetroCheckbox
+                        label="Hide score from students after completion"
+                        checked={!form.show_score_to_student}
+                        onChange={(v) => setForm({ ...form, show_score_to_student: !v })}
+                      />
+                    </div>
                   </td>
                 </tr>
               </tbody>
