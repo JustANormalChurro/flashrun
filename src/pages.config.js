@@ -16,6 +16,10 @@ import TeacherHelp from './pages/TeacherHelp';
 import StudentDashboard from './pages/StudentDashboard';
 import JoinRoom from './pages/JoinRoom';
 import StudentRoom from './pages/StudentRoom';
+import TakeTest from './pages/TakeTest';
+import TakeAssignment from './pages/TakeAssignment';
+import StudentHistory from './pages/StudentHistory';
+import SuperAdmin from './pages/SuperAdmin';
 
 
 export const PAGES = {
@@ -37,6 +41,10 @@ export const PAGES = {
     "StudentDashboard": StudentDashboard,
     "JoinRoom": JoinRoom,
     "StudentRoom": StudentRoom,
+    "TakeTest": TakeTest,
+    "TakeAssignment": TakeAssignment,
+    "StudentHistory": StudentHistory,
+    "SuperAdmin": SuperAdmin,
 }
 
 export const pagesConfig = {
