@@ -201,7 +201,7 @@ export default function TeacherDashboard() {
       </div>
 
       <div style={{ borderTop: '1px solid #999999', padding: '10px', textAlign: 'center', fontSize: '10px', color: '#666666', backgroundColor: '#e0e0e0' }}>
-        FlashRun Secure Testing Browser v2.1.4 | District Technology Services | &copy; 2009
+        FlashRun Secure Testing Browser v2.1.4 | District Technology Services | &copy; 2025 | Created 2008
       </div>
     </div>
   );

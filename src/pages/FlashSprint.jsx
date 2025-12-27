@@ -76,7 +76,7 @@ export default function FlashSprint() {
           ⚡ FlashSprint AI Assistant ⚡
         </div>
         <div style={{ fontSize: '12px', marginTop: '5px' }}>
-          Revolutionary Artificial Intelligence - The Future is NOW! (Patent Pending 2008)
+          Revolutionary Artificial Intelligence - The Future is NOW! (Patent Pending 2025, Launched 2008)
         </div>
       </div>
 

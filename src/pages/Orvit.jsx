@@ -72,7 +72,7 @@ export default function Orvit() {
 
           <div style={{ marginTop: '40px', fontSize: '10px', color: '#999999' }}>
             Orvit™ - Powered by FlashRun Secure Testing Browser<br/>
-            Patent Pending Technology | © 2008
+            Patent Pending Technology | © 2025 | Launched 2008
           </div>
         </div>
       </div>

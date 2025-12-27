@@ -110,10 +110,10 @@ export default function NotificationBell({ user }) {
                   backgroundColor: notif.is_read ? 'white' : '#ffffee'
                 }}
               >
-                <div style={{ fontSize: '11px', fontWeight: 'bold', marginBottom: '3px' }}>
+                <div style={{ fontSize: '11px', fontWeight: 'bold', marginBottom: '3px', color: '#000' }}>
                   {notif.room_name}
                 </div>
-                <div style={{ fontSize: '10px', marginBottom: '5px' }}>
+                <div style={{ fontSize: '10px', marginBottom: '5px', color: '#333' }}>
                   {notif.type.toUpperCase()}: {notif.title}
                 </div>
                 <div style={{ display: 'flex', gap: '5px', marginTop: '5px' }}>
