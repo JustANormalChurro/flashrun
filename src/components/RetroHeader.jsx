@@ -1,6 +1,7 @@
 import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
+import NotificationBell from './NotificationBell';
 
 export default function RetroHeader({ user, title = "FlashRun Secure Testing Browser" }) {
   const handleLogout = () => {
@@ -21,17 +22,20 @@ export default function RetroHeader({ user, title = "FlashRun Secure Testing Bro
             <td style={{ padding: '10px', textAlign: 'right', color: 'white', fontSize: '11px' }}>
               {user && (
                 <>
-                  Logged in as: <strong>{user.full_name || user.email}</strong>
-                  {user.teacher_id && <span> | ID: {user.teacher_id}</span>}
-                  {user.user_type && <span> | Role: {user.user_type.toUpperCase()}</span>}
-                  <span> | </span>
-                  <a
-                    href="#"
-                    onClick={(e) => { e.preventDefault(); handleLogout(); }}
-                    style={{ color: '#99ccff', textDecoration: 'underline', cursor: 'pointer' }}
-                  >
-                    Sign Out
-                  </a>
+                  <NotificationBell user={user} />
+                  <span style={{ marginLeft: '10px' }}>
+                    Logged in as: <strong>{user.full_name || user.email}</strong>
+                    {user.teacher_id && <span> | ID: {user.teacher_id}</span>}
+                    {user.user_type && <span> | Role: {user.user_type.toUpperCase()}</span>}
+                    <span> | </span>
+                    <a
+                      href="#"
+                      onClick={(e) => { e.preventDefault(); handleLogout(); }}
+                      style={{ color: '#99ccff', textDecoration: 'underline', cursor: 'pointer' }}
+                    >
+                      Sign Out
+                    </a>
+                  </span>
                 </>
               )}
             </td>
@@ -53,9 +57,12 @@ export default function RetroHeader({ user, title = "FlashRun Secure Testing Bro
                     <a href={createPageUrl('ManageRooms')} style={{ color: 'white', marginRight: '15px' }}>My Rooms</a>
                     <a href={createPageUrl('ManageStudents')} style={{ color: 'white', marginRight: '15px' }}>Students</a>
                     <a href={createPageUrl('TeacherHelp')} style={{ color: 'white', marginRight: '15px' }}>Help & Docs</a>
-                    {(user?.user_type === 'superadmin' || user?.email === 'admin.simplstream@protonmail.com') && (
-                      <a href={createPageUrl('SuperAdmin')} style={{ color: '#ffcc00', marginRight: '15px' }}>Admin Panel</a>
-                    )}
+                    <a href={createPageUrl('Orvit')} style={{ color: '#99ff99', marginRight: '15px' }}>Orvit Chat</a>
+                        <a href={createPageUrl('FlashSprint')} style={{ color: '#ffcc99', marginRight: '15px' }}>FlashSprint AI</a>
+                        <a href={createPageUrl('DirectMessages')} style={{ color: '#ccccff', marginRight: '15px' }}>Messages</a>
+                        {(user?.user_type === 'superadmin' || user?.email === 'admin.simplstream@protonmail.com') && (
+                          <a href={createPageUrl('SuperAdmin')} style={{ color: '#ffcc00', marginRight: '15px' }}>Admin Panel</a>
+                        )}
                   </>
                 ) : (
                   <>

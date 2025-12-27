@@ -22,6 +22,8 @@ import StudentHistory from './pages/StudentHistory';
 import SuperAdmin from './pages/SuperAdmin';
 import Home from './pages/Home';
 import StudentVerification from './pages/StudentVerification';
+import Orvit from './pages/Orvit';
+import OrbitRooms from './pages/OrbitRooms';
 import __Layout from './Layout.jsx';
 
 
@@ -50,6 +52,8 @@ export const PAGES = {
     "SuperAdmin": SuperAdmin,
     "Home": Home,
     "StudentVerification": StudentVerification,
+    "Orvit": Orvit,
+    "OrbitRooms": OrbitRooms,
 }
 
 export const pagesConfig = {
