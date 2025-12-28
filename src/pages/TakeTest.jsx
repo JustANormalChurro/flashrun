@@ -137,7 +137,14 @@ export default function TakeTest() {
 
     const answersArray = questions.map(q => {
       const studentAnswer = answers[q.id] || '';
-      const isCorrect = studentAnswer === q.correct_answer;
+      let isCorrect = false;
+      
+      if (q.question_type === 'fill_in_the_blank') {
+        isCorrect = studentAnswer.trim().toLowerCase() === (q.correct_answer || '').trim().toLowerCase();
+      } else {
+        isCorrect = studentAnswer === q.correct_answer;
+      }
+      
       return {
         question_id: q.id,
         answer: studentAnswer,
