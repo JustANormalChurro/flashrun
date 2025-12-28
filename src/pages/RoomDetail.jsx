@@ -204,26 +204,41 @@ export default function RoomDetail() {
     }
   };
 
-  const requestRows = requests.filter(r => r.status === 'pending').map(r => ({
-    data: r,
-    cells: [
-      <>
-        {r.title}
-        {r.requester_id === 'ai' && <span style={{ backgroundColor: '#ff6600', color: 'white', fontSize: '9px', padding: '1px 4px', marginLeft: '5px' }}>AI</span>}
-      </>,
-      r.content_type,
-      r.requester_name || 'AI',
-      r.changes_description || r.type.replace('_', ' '),
-      new Date(r.created_date).toLocaleDateString(),
-      <>
-        <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleApproveRequest(r); }} style={{ color: '#006600', marginRight: '10px' }}>Approve</a>
-        <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRejectRequest(r); }} style={{ color: '#cc0000', marginRight: '10px' }}>Reject</a>
-        {r.original_data && (
-          <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRevertRequest(r); }} style={{ color: '#cc6600' }}>Revert</a>
-        )}
-      </>
-    ]
-  }));
+  const requestRows = requests.filter(r => r.status === 'pending').map(r => {
+    const viewUrl = r.content_type === 'test' 
+      ? createPageUrl('EditTest') + '?id=' + r.content_id
+      : r.content_type === 'assignment'
+      ? createPageUrl('EditAssignment') + '?id=' + r.content_id
+      : createPageUrl('EditAnnouncement') + '?id=' + r.content_id;
+    
+    return {
+      data: r,
+      cells: [
+        <>
+          {r.title}
+          {r.requester_id === 'ai' && <span style={{ backgroundColor: '#ff6600', color: 'white', fontSize: '9px', padding: '1px 4px', marginLeft: '5px' }}>AI</span>}
+        </>,
+        r.content_type,
+        r.requester_name || 'AI',
+        r.changes_description || r.type.replace('_', ' '),
+        new Date(r.created_date).toLocaleDateString(),
+        <>
+          <RetroButton 
+            onClick={() => window.location.href = viewUrl}
+            variant="danger"
+            style={{ padding: '3px 8px', fontSize: '9px', marginRight: '5px' }}
+          >
+            View
+          </RetroButton>
+          <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleApproveRequest(r); }} style={{ color: '#006600', marginRight: '10px' }}>Approve</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRejectRequest(r); }} style={{ color: '#cc0000', marginRight: '10px' }}>Reject</a>
+          {r.original_data && (
+            <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRevertRequest(r); }} style={{ color: '#cc6600' }}>Revert</a>
+          )}
+        </>
+      ]
+    };
+  });
 
   return (
     <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
@@ -357,11 +372,24 @@ export default function RoomDetail() {
               <div style={{ marginBottom: '10px', backgroundColor: '#ffffcc', border: '1px solid #ffcc00', padding: '8px', fontSize: '11px' }}>
                 Review changes made by collaborating teachers and AI-generated content before publishing.
               </div>
-              <RetroTable
-                headers={['Title', 'Type', 'Requested By', 'Change', 'Date', 'Actions']}
-                rows={requestRows}
-                emptyMessage="No pending requests"
-              />
+              {requests.length === 0 ? (
+                <div style={{ padding: '20px', textAlign: 'center', backgroundColor: '#f5f5f5', border: '1px solid #ddd' }}>
+                  <p style={{ marginBottom: '10px', fontStyle: 'italic', color: '#666' }}>No requests found for this room.</p>
+                  <p style={{ fontSize: '10px', color: '#999' }}>Room ID: {roomId}</p>
+                  <p style={{ fontSize: '10px', color: '#999' }}>Total requests loaded: {requests.length}</p>
+                </div>
+              ) : (
+                <>
+                  <div style={{ marginBottom: '5px', fontSize: '10px', color: '#666' }}>
+                    Total: {requests.length} | Pending: {requests.filter(r => r.status === 'pending').length} | Room ID: {roomId}
+                  </div>
+                  <RetroTable
+                    headers={['Title', 'Type', 'Requested By', 'Change', 'Date', 'Actions']}
+                    rows={requestRows}
+                    emptyMessage="No pending requests (check other statuses)"
+                  />
+                </>
+              )}
             </>
           )}
         </div>
