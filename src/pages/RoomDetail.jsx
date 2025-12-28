@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import RetroHeader from '@/components/RetroHeader';
 import RetroTable from '@/components/RetroTable';
 import RetroButton from '@/components/RetroButton';
+import FloatingAI from '@/components/FloatingAI';
 
 export default function RoomDetail() {
   const [user, setUser] = useState(null);
@@ -12,6 +13,7 @@ export default function RoomDetail() {
   const [assignments, setAssignments] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [members, setMembers] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('tests');
 
@@ -41,6 +43,9 @@ export default function RoomDetail() {
 
       const allMembers = await base44.entities.RoomMembership.filter({ room_id: roomId });
       setMembers(allMembers);
+
+      const allRequests = await base44.entities.Request.filter({ room_id: roomId });
+      setRequests(allRequests);
     } catch (e) {
       console.error(e);
     } finally {
@@ -157,6 +162,58 @@ export default function RoomDetail() {
     ]
   }));
 
+  const handleApproveRequest = async (request) => {
+    await base44.entities.Request.update(request.id, { status: 'approved' });
+    if (request.content_type === 'test') {
+      await base44.entities.Test.update(request.content_id, { is_published: true });
+    } else if (request.content_type === 'assignment') {
+      await base44.entities.Assignment.update(request.content_id, { is_published: true });
+    }
+    loadData();
+  };
+
+  const handleRejectRequest = async (request) => {
+    if (window.confirm('Reject this request?')) {
+      await base44.entities.Request.update(request.id, { status: 'rejected' });
+      loadData();
+    }
+  };
+
+  const handleRevertRequest = async (request) => {
+    if (window.confirm('Revert these changes?')) {
+      if (request.original_data && request.content_id) {
+        if (request.content_type === 'test') {
+          await base44.entities.Test.update(request.content_id, request.original_data);
+        } else if (request.content_type === 'assignment') {
+          await base44.entities.Assignment.update(request.content_id, request.original_data);
+        }
+      }
+      await base44.entities.Request.update(request.id, { status: 'reverted' });
+      loadData();
+    }
+  };
+
+  const requestRows = requests.filter(r => r.status === 'pending').map(r => ({
+    data: r,
+    cells: [
+      <>
+        {r.title}
+        {r.requester_id === 'ai' && <span style={{ backgroundColor: '#ff6600', color: 'white', fontSize: '9px', padding: '1px 4px', marginLeft: '5px' }}>AI</span>}
+      </>,
+      r.content_type,
+      r.requester_name || 'AI',
+      r.changes_description || r.type.replace('_', ' '),
+      new Date(r.created_date).toLocaleDateString(),
+      <>
+        <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleApproveRequest(r); }} style={{ color: '#006600', marginRight: '10px' }}>Approve</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRejectRequest(r); }} style={{ color: '#cc0000', marginRight: '10px' }}>Reject</a>
+        {r.original_data && (
+          <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRevertRequest(r); }} style={{ color: '#cc6600' }}>Revert</a>
+        )}
+      </>
+    ]
+  }));
+
   return (
     <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
       <RetroHeader user={user} />
@@ -199,6 +256,7 @@ export default function RoomDetail() {
           <span style={tabStyle('assignments')} onClick={() => setActiveTab('assignments')}>Assignments ({assignments.length})</span>
           <span style={tabStyle('announcements')} onClick={() => setActiveTab('announcements')}>Announcements ({announcements.length})</span>
           <span style={tabStyle('students')} onClick={() => setActiveTab('students')}>Students ({studentMembers.length})</span>
+          <span style={tabStyle('requests')} onClick={() => setActiveTab('requests')}>Requests ({requests.filter(r => r.status === 'pending').length})</span>
         </div>
 
         <div style={{ backgroundColor: 'white', border: '1px solid #999999', padding: '15px' }}>
@@ -259,7 +317,22 @@ export default function RoomDetail() {
               />
             </>
           )}
+
+          {activeTab === 'requests' && (
+            <>
+              <div style={{ marginBottom: '10px', backgroundColor: '#ffffcc', border: '1px solid #ffcc00', padding: '8px', fontSize: '11px' }}>
+                Review changes made by collaborating teachers and AI-generated content before publishing.
+              </div>
+              <RetroTable
+                headers={['Title', 'Type', 'Requested By', 'Change', 'Date', 'Actions']}
+                rows={requestRows}
+                emptyMessage="No pending requests"
+              />
+            </>
+          )}
         </div>
+
+        <FloatingAI roomId={roomId} room={room} />
 
         <div style={{ marginTop: '15px' }}>
           <RetroButton onClick={() => window.location.href = createPageUrl('ManageRooms')} variant="secondary">

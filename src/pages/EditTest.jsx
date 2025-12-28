@@ -240,7 +240,10 @@ export default function EditTest() {
 
         <div style={{ backgroundColor: 'white', border: '1px solid #999999', padding: '15px' }}>
           <RetroButton onClick={() => handleSave()} disabled={saving}>
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? 'Saving...' : 'Save as Draft'}
+          </RetroButton>
+          <RetroButton onClick={() => window.location.href = createPageUrl('TakeTest') + '?id=' + testId} variant="secondary" style={{ marginLeft: '10px' }}>
+            Preview
           </RetroButton>
           {!test?.is_published && (
             <RetroButton onClick={() => handleSave(true)} variant="success" style={{ marginLeft: '10px' }} disabled={saving}>

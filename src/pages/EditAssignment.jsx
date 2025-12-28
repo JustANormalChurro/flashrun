@@ -172,7 +172,10 @@ export default function EditAssignment() {
 
         <div style={{ backgroundColor: 'white', border: '1px solid #999999', padding: '15px' }}>
           <RetroButton onClick={() => handleSave()} disabled={saving}>
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? 'Saving...' : 'Save as Draft'}
+          </RetroButton>
+          <RetroButton onClick={() => window.location.href = createPageUrl('TakeAssignment') + '?id=' + assignmentId} variant="secondary" style={{ marginLeft: '10px' }}>
+            Preview
           </RetroButton>
           {!assignment?.is_published && (
             <RetroButton onClick={() => handleSave(true)} variant="success" style={{ marginLeft: '10px' }} disabled={saving}>

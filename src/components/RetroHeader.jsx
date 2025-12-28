@@ -58,8 +58,7 @@ export default function RetroHeader({ user, title = "FlashRun Secure Testing Bro
                     <a href={createPageUrl('ManageStudents')} style={{ color: 'white', marginRight: '15px' }}>Students</a>
                     <a href={createPageUrl('TeacherHelp')} style={{ color: 'white', marginRight: '15px' }}>Help & Docs</a>
                     <a href={createPageUrl('Orvit')} style={{ color: '#99ff99', marginRight: '15px' }}>Orvit Chat</a>
-                        <a href={createPageUrl('FlashSprint')} style={{ color: '#ffcc99', marginRight: '15px' }}>FlashSprint AI</a>
-                        <a href={createPageUrl('DirectMessages')} style={{ color: '#ccccff', marginRight: '15px' }}>Messages</a>
+                    <a href={createPageUrl('DirectMessages')} style={{ color: '#ccccff', marginRight: '15px' }}>Messages</a>
                         {(user?.user_type === 'superadmin' || user?.email === 'admin.simplstream@protonmail.com') && (
                           <a href={createPageUrl('SuperAdmin')} style={{ color: '#ffcc00', marginRight: '15px' }}>Admin Panel</a>
                         )}
