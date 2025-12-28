@@ -56,7 +56,7 @@ export default function FloatingAI({ roomId, room }) {
 
   const handleSend = async (overrideMessage = null) => {
     const messageToSend = overrideMessage || input;
-    if (!messageToSend.trim() || !conversation || sending) return;
+    if (!messageToSend || typeof messageToSend !== 'string' || !messageToSend.trim() || !conversation || sending) return;
 
     setSending(true);
     if (!overrideMessage) setInput('');
