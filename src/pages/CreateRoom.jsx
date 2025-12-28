@@ -4,7 +4,6 @@ import { createPageUrl } from '@/utils';
 import RetroHeader from '@/components/RetroHeader';
 import RetroButton from '@/components/RetroButton';
 import { RetroInput, RetroTextarea } from '@/components/RetroInput';
-import LoadingSpinner from '@/components/LoadingSpinner';
 
 function generateCode(length = 6) {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -63,7 +62,11 @@ export default function CreateRoom() {
   };
 
   if (loading) {
-    return <LoadingSpinner message="Loading" />;
+    return (
+      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+        <p style={{ padding: '20px' }}>Loading...</p>
+      </div>
+    );
   }
 
   return (

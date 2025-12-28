@@ -70,7 +70,11 @@ export default function RoomDetail() {
   };
 
   if (loading) {
-    return <LoadingSpinner message="Loading Room Details" />;
+    return (
+      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+        <p style={{ padding: '20px' }}>Loading...</p>
+      </div>
+    );
   }
 
   if (!room) {

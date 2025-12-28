@@ -41,7 +41,11 @@ export default function ManageRooms() {
   };
 
   if (loading) {
-    return <LoadingSpinner message="Loading Rooms" />;
+    return (
+      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+        <p style={{ padding: '20px' }}>Loading...</p>
+      </div>
+    );
   }
 
   const roomRows = rooms.map(room => ({

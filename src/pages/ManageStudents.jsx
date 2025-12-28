@@ -60,7 +60,11 @@ export default function ManageStudents() {
   };
 
   if (loading) {
-    return <LoadingSpinner message="Loading Students" />;
+    return (
+      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+        <p style={{ padding: '20px' }}>Loading...</p>
+      </div>
+    );
   }
 
   const isSuperAdmin = user?.user_type === 'superadmin' || user?.email === 'admin.simplstream@protonmail.com';

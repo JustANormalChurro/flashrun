@@ -5,7 +5,6 @@ import RetroHeader from '@/components/RetroHeader';
 import RetroTable from '@/components/RetroTable';
 import RetroButton from '@/components/RetroButton';
 import { RetroSelect, RetroInput } from '@/components/RetroInput';
-import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function SuperAdmin() {
   const [user, setUser] = useState(null);
@@ -94,7 +93,11 @@ export default function SuperAdmin() {
   };
 
   if (loading) {
-    return <LoadingSpinner message="Loading Admin Panel" />;
+    return (
+      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
+        <p style={{ padding: '20px' }}>Loading...</p>
+      </div>
+    );
   }
 
   const userRows = users.filter(u => u.id !== user.id).map(u => ({

@@ -4,7 +4,6 @@ import { createPageUrl } from '@/utils';
 import RetroHeader from '@/components/RetroHeader';
 import RetroButton from '@/components/RetroButton';
 import { RetroInput, RetroTextarea } from '@/components/RetroInput';
-import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function ChatRoom() {
   const [user, setUser] = useState(null);
@@ -149,7 +148,7 @@ export default function ChatRoom() {
   };
 
   if (!room) {
-    return <LoadingSpinner message="Loading Chat Room" />;
+    return <div style={{ padding: '20px' }}>Loading...</div>;
   }
 
   const isOwner = room.owner_id === user?.id;
