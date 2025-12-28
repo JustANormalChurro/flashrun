@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import RetroHeader from '@/components/RetroHeader';
 import RetroButton from '@/components/RetroButton';
 import { createPageUrl } from '@/utils';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function TeacherHelp() {
   const [user, setUser] = useState(null);
@@ -20,11 +21,7 @@ export default function TeacherHelp() {
   };
 
   if (loading) {
-    return (
-      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-        <p style={{ padding: '20px' }}>Loading...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading Help" />;
   }
 
   const sections = [

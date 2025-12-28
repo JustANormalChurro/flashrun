@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import RetroHeader from '@/components/RetroHeader';
 import RetroTable from '@/components/RetroTable';
 import RetroButton from '@/components/RetroButton';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function StudentHistory() {
   const [user, setUser] = useState(null);
@@ -46,11 +47,7 @@ export default function StudentHistory() {
   };
 
   if (loading) {
-    return (
-      <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
-        <p style={{ padding: '20px' }}>Loading...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading History" />;
   }
 
   const testRows = testSubmissions.map(s => {
