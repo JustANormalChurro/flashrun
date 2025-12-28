@@ -16,6 +16,7 @@ export default function RoomDetail() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('tests');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const urlParams = new URLSearchParams(window.location.search);
   const roomId = urlParams.get('id');
@@ -102,7 +103,17 @@ export default function RoomDetail() {
     fontWeight: activeTab === tab ? 'bold' : 'normal'
   });
 
-  const testRows = tests.map(test => {
+  const filteredTests = tests.filter(t => 
+    t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (t.description && t.description.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const filteredAssignments = assignments.filter(a => 
+    a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (a.description && a.description.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const testRows = filteredTests.map(test => {
     const isNew = new Date(test.created_date) > new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
     return {
       data: test,
@@ -122,7 +133,7 @@ export default function RoomDetail() {
     };
   });
 
-  const assignmentRows = assignments.map(a => ({
+  const assignmentRows = filteredAssignments.map(a => ({
     data: a,
     cells: [
       a.title,
@@ -250,6 +261,29 @@ export default function RoomDetail() {
             </table>
           </div>
         </div>
+
+        {(activeTab === 'tests' || activeTab === 'assignments') && (
+          <div style={{ marginBottom: '10px' }}>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: '300px',
+                padding: '4px 6px',
+                border: '1px solid #999999',
+                fontFamily: 'Tahoma, Arial, sans-serif',
+                fontSize: '11px'
+              }}
+            />
+            {searchQuery && (
+              <span style={{ marginLeft: '10px', fontSize: '11px', color: '#666' }}>
+                Found: {activeTab === 'tests' ? filteredTests.length : filteredAssignments.length} results
+              </span>
+            )}
+          </div>
+        )}
 
         <div style={{ marginBottom: '-1px' }}>
           <span style={tabStyle('tests')} onClick={() => setActiveTab('tests')}>Tests/Exams ({tests.length})</span>

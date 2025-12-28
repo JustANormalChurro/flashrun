@@ -93,12 +93,16 @@ export default function FloatingAI({ roomId, room }) {
           zIndex: 1000,
           fontWeight: 'bold',
           color: 'white',
-          fontSize: '24px',
-          animation: 'pulse 2s infinite'
+          fontSize: '14px',
+          animation: 'pulse 2s infinite',
+          fontFamily: 'Courier New, monospace'
         }}
         title="FlashRun AI Assistant"
       >
-        ⚡
+        <div style={{ textAlign: 'center', lineHeight: '1' }}>
+          <div style={{ fontSize: '18px', fontWeight: 'bold' }}>AI</div>
+          <div style={{ fontSize: '8px' }}>v2.1</div>
+        </div>
         <style>{`
           @keyframes pulse {
             0%, 100% { transform: scale(1); }
@@ -135,7 +139,18 @@ export default function FloatingAI({ roomId, room }) {
         alignItems: 'center',
         borderBottom: '2px solid #cc4400'
       }}>
-        <span>⚡ FlashRun AI - {room.name}</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ 
+            backgroundColor: 'white', 
+            color: '#ff6600', 
+            padding: '2px 6px', 
+            borderRadius: '3px',
+            fontSize: '10px',
+            fontFamily: 'Courier New, monospace',
+            fontWeight: 'bold'
+          }}>AI</span>
+          FlashRun AI - {room.name}
+        </span>
         <button
           onClick={() => setIsOpen(false)}
           style={{
@@ -147,14 +162,25 @@ export default function FloatingAI({ roomId, room }) {
             padding: '0 5px'
           }}
         >
-          ✕
+          X
         </button>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '10px', backgroundColor: '#f9f9f9' }}>
         {messages.length === 0 && (
           <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
-            Hi! I'm FlashRun AI, your classroom assistant. I can help you create tests and assignments for this room.
+            <div style={{ 
+              backgroundColor: 'white', 
+              color: '#ff6600', 
+              padding: '4px 8px', 
+              borderRadius: '3px',
+              fontSize: '12px',
+              fontFamily: 'Courier New, monospace',
+              fontWeight: 'bold',
+              display: 'inline-block',
+              marginBottom: '10px'
+            }}>AI v2.1</div>
+            <div>Hi! I'm FlashRun AI, your classroom assistant. I can help you create tests and assignments, review existing content, and answer questions about this room.</div>
           </div>
         )}
         
