@@ -22,12 +22,64 @@ export default function FloatingAI({ roomId, room }) {
 
   useEffect(() => {
     if (conversation) {
-      const unsubscribe = base44.agents.subscribeToConversation(conversation.id, (data) => {
-        setMessages(data.messages || []);
+      const unsubscribe = base44.agents.subscribeToConversation(conversation.id, async (data) => {
+        const newMessages = data.messages || [];
+        setMessages(newMessages);
+        
+        // Auto-create Request records when AI creates content
+        if (newMessages.length > 0) {
+          const lastMsg = newMessages[newMessages.length - 1];
+          if (lastMsg.role === 'assistant' && lastMsg.tool_calls) {
+            for (const tool of lastMsg.tool_calls) {
+              if (tool.status === 'completed' && tool.results) {
+                try {
+                  const result = typeof tool.results === 'string' ? JSON.parse(tool.results) : tool.results;
+                  
+                  if (tool.name && result?.id) {
+                    let contentType = null;
+                    let title = '';
+                    
+                    if (tool.name.includes('Test.create')) {
+                      contentType = 'test';
+                      title = result.title || 'AI-Generated Test';
+                    } else if (tool.name.includes('Assignment.create')) {
+                      contentType = 'assignment';
+                      title = result.title || 'AI-Generated Assignment';
+                    }
+                    
+                    if (contentType) {
+                      // Check if Request already exists
+                      const existingRequests = await base44.entities.Request.filter({ 
+                        content_id: result.id,
+                        room_id: roomId 
+                      });
+                      
+                      if (existingRequests.length === 0) {
+                        await base44.entities.Request.create({
+                          room_id: roomId,
+                          type: 'ai_generated',
+                          content_id: result.id,
+                          content_type: contentType,
+                          requester_id: 'ai',
+                          requester_name: 'FlashRun AI',
+                          title: title,
+                          status: 'pending',
+                          changes_description: `AI-generated ${contentType} ready for review`
+                        });
+                      }
+                    }
+                  }
+                } catch (e) {
+                  console.error('Error auto-creating Request:', e);
+                }
+              }
+            }
+          }
+        }
       });
       return () => unsubscribe();
     }
-  }, [conversation]);
+  }, [conversation, roomId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -89,7 +141,7 @@ export default function FloatingAI({ roomId, room }) {
     setShowContentButtons(false);
     setSending(true);
     
-    const enhancedMessage = `${pendingIntent}\n\nIMPORTANT: Create a ${type} for room_id: ${roomId}. After creating the ${type}, you MUST create a Request record with:\n- room_id: ${roomId}\n- type: 'ai_generated'\n- content_id: (ID of ${type} you just created)\n- content_type: '${type}'\n- requester_id: 'ai'\n- requester_name: 'FlashRun AI'\n- title: (same as ${type} title)\n- status: 'pending'\n- changes_description: 'AI-generated ${type} ready for review'`;
+    const enhancedMessage = `${pendingIntent}\n\nCreate a ${type} for this classroom (room_id: ${roomId}). Make it educational and high-quality.`;
 
     await base44.agents.addMessage(conversation, {
       role: 'user',
@@ -112,20 +164,18 @@ export default function FloatingAI({ roomId, room }) {
     return 'Performed action';
   };
 
-  const getCreatedContentId = (messages) => {
-    for (let i = messages.length - 1; i >= 0; i--) {
-      const msg = messages[i];
-      if (msg.tool_calls) {
-        for (const tool of msg.tool_calls) {
-          if (tool.name && (tool.name.includes('Test.create') || tool.name.includes('Assignment.create'))) {
-            try {
-              const result = typeof tool.results === 'string' ? JSON.parse(tool.results) : tool.results;
-              if (result?.id) {
-                const type = tool.name.includes('Test') ? 'test' : 'assignment';
-                return { id: result.id, type };
-              }
-            } catch (e) {}
-          }
+  const getCreatedContentId = (msgIndex) => {
+    const msg = messages[msgIndex];
+    if (msg && msg.tool_calls) {
+      for (const tool of msg.tool_calls) {
+        if (tool.status === 'completed' && tool.name && (tool.name.includes('Test.create') || tool.name.includes('Assignment.create'))) {
+          try {
+            const result = typeof tool.results === 'string' ? JSON.parse(tool.results) : tool.results;
+            if (result?.id) {
+              const type = tool.name.includes('Test') ? 'test' : 'assignment';
+              return { id: result.id, type };
+            }
+          } catch (e) {}
         }
       }
     }
@@ -291,8 +341,8 @@ export default function FloatingAI({ roomId, room }) {
                     ))}
                   </div>
                 )}
-                {msg.role === 'assistant' && !sending && (() => {
-                  const content = getCreatedContentId(messages.slice(0, i + 1));
+                {msg.role === 'assistant' && (() => {
+                  const content = getCreatedContentId(i);
                   if (content) {
                     const url = content.type === 'test' 
                       ? createPageUrl('EditTest') + '?id=' + content.id
@@ -301,8 +351,8 @@ export default function FloatingAI({ roomId, room }) {
                       <div style={{ marginTop: '5px' }}>
                         <RetroButton 
                           onClick={() => window.location.href = url}
-                          variant="success"
-                          style={{ padding: '3px 8px', fontSize: '9px' }}
+                          variant="danger"
+                          style={{ padding: '4px 10px', fontSize: '10px' }}
                         >
                           View {content.type === 'test' ? 'Test' : 'Assignment'}
                         </RetroButton>
