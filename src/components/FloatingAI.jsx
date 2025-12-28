@@ -56,7 +56,8 @@ export default function FloatingAI({ roomId, room }) {
 
   const handleSend = async (overrideMessage = null) => {
     const messageToSend = overrideMessage || input;
-    if (!messageToSend || typeof messageToSend !== 'string' || !messageToSend.trim() || !conversation || sending) return;
+    const msgStr = String(messageToSend);
+    if (!msgStr || !msgStr.trim() || !conversation || sending) return;
 
     setSending(true);
     if (!overrideMessage) setInput('');
@@ -66,12 +67,12 @@ export default function FloatingAI({ roomId, room }) {
     const createKeywords = ['create', 'make', 'generate', 'build', 'new'];
     const contentKeywords = ['test', 'assignment', 'announcement', 'quiz', 'exam'];
     
-    const lowerMsg = messageToSend.toLowerCase();
+    const lowerMsg = msgStr.toLowerCase();
     const hasCreateIntent = createKeywords.some(k => lowerMsg.includes(k));
     const hasContentType = contentKeywords.some(k => lowerMsg.includes(k));
 
     if (hasCreateIntent && hasContentType && !overrideMessage) {
-      setPendingIntent(messageToSend);
+      setPendingIntent(msgStr);
       setShowContentButtons(true);
       setSending(false);
       return;
@@ -79,7 +80,7 @@ export default function FloatingAI({ roomId, room }) {
 
     await base44.agents.addMessage(conversation, {
       role: 'user',
-      content: messageToSend
+      content: msgStr
     });
 
     setSending(false);
