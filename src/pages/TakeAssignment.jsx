@@ -49,7 +49,10 @@ export default function TakeAssignment() {
     setLoading(false);
   };
 
-  const questions = assignment?.questions || [];
+  const questions = (assignment?.questions || []).map((q, idx) => ({
+    ...q,
+    id: q.id || `q_${idx}_${Date.now()}`
+  }));
 
   const selectAnswer = (questionId, answer) => {
     setAnswers(prev => ({ ...prev, [questionId]: answer }));
