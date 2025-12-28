@@ -51,7 +51,7 @@ export default function TakeAssignment() {
 
   const questions = (assignment?.questions || []).map((q, idx) => ({
     ...q,
-    id: q.id || `q_${idx}_${Date.now()}`
+    id: q.id || `q_${idx}`
   }));
 
   const selectAnswer = (questionId, answer) => {

@@ -79,7 +79,7 @@ export default function TakeTest() {
         // Ensure each question has a unique ID
         qs = qs.map((q, idx) => ({
           ...q,
-          id: q.id || `q_${idx}_${Date.now()}`
+          id: q.id || `q_${idx}`
         }));
         if (t.randomize_questions) {
           qs = qs.sort(() => Math.random() - 0.5);
