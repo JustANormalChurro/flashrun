@@ -26,6 +26,7 @@ export default function TakeTest() {
 
   const urlParams = new URLSearchParams(window.location.search);
   const testId = urlParams.get('id');
+  const isPreview = urlParams.get('preview') === 'true';
   const timerRef = useRef(null);
 
   useEffect(() => {
@@ -120,6 +121,13 @@ export default function TakeTest() {
   };
 
   const handleSubmit = async () => {
+    if (isPreview) {
+      if (window.confirm('Preview complete. Return to test editor?')) {
+        window.location.href = createPageUrl('EditTest') + '?id=' + testId;
+      }
+      return;
+    }
+
     if (!window.confirm('Are you sure you want to submit? You cannot change your answers after submission.')) {
       return;
     }
@@ -173,7 +181,7 @@ export default function TakeTest() {
     );
   }
 
-  if (existingSubmission) {
+  if (existingSubmission && !isPreview) {
     return (
       <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
         <RetroHeader user={user} />
@@ -203,7 +211,7 @@ export default function TakeTest() {
     );
   }
 
-  if (submitted) {
+  if (submitted && !isPreview) {
     return (
       <div style={{ fontFamily: 'Tahoma, Arial, sans-serif', fontSize: '12px', backgroundColor: '#f0f0f0', minHeight: '100vh' }}>
         <RetroHeader user={user} />
@@ -279,9 +287,15 @@ export default function TakeTest() {
                 <RetroButton onClick={handleStart}>
                   Begin Test
                 </RetroButton>
-                <RetroButton onClick={() => window.location.href = createPageUrl('StudentRoom') + '?id=' + test.room_id} variant="secondary" style={{ marginLeft: '10px' }}>
-                  Cancel
-                </RetroButton>
+                {isPreview ? (
+                  <RetroButton onClick={() => window.location.href = createPageUrl('EditTest') + '?id=' + testId} variant="secondary" style={{ marginLeft: '10px' }}>
+                    Back to Editor
+                  </RetroButton>
+                ) : (
+                  <RetroButton onClick={() => window.location.href = createPageUrl('StudentRoom') + '?id=' + test.room_id} variant="secondary" style={{ marginLeft: '10px' }}>
+                    Cancel
+                  </RetroButton>
+                )}
               </div>
             </div>
           </div>
@@ -356,7 +370,21 @@ export default function TakeTest() {
             </div>
 
             <div style={{ marginTop: '20px' }}>
-              {currentQuestion?.choices?.map((choice, i) => (
+              {currentQuestion?.question_type === 'fill_in_the_blank' ? (
+                <input
+                  type="text"
+                  value={answers[currentQuestion.id] || ''}
+                  onChange={(e) => selectAnswer(currentQuestion.id, e.target.value)}
+                  placeholder="Type your answer here"
+                  style={{
+                    width: '100%',
+                    padding: '8px',
+                    border: '1px solid #999999',
+                    fontFamily: 'Tahoma, Arial, sans-serif',
+                    fontSize: '12px'
+                  }}
+                />
+              ) : currentQuestion?.choices?.map((choice, i) => (
                 <div
                   key={i}
                   onClick={() => selectAnswer(currentQuestion.id, choice)}
@@ -382,6 +410,15 @@ export default function TakeTest() {
 
           <div style={{ marginTop: '15px', display: 'flex', justifyContent: 'space-between' }}>
             <div>
+              {isPreview && (
+                <RetroButton 
+                  onClick={() => window.location.href = createPageUrl('EditTest') + '?id=' + testId}
+                  variant="secondary"
+                  style={{ marginRight: '10px' }}
+                >
+                  Back to Editor
+                </RetroButton>
+              )}
               <RetroButton 
                 onClick={() => goToQuestion(currentQuestionIndex - 1)} 
                 variant="secondary"
@@ -399,7 +436,7 @@ export default function TakeTest() {
               </RetroButton>
             </div>
             <RetroButton onClick={handleSubmit} variant="success" disabled={submitting}>
-              {submitting ? 'Submitting...' : 'Submit Test'}
+              {submitting ? 'Submitting...' : isPreview ? 'End Preview' : 'Submit Test'}
             </RetroButton>
           </div>
         </div>
