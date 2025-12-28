@@ -76,6 +76,11 @@ export default function TakeTest() {
         }
 
         let qs = [...(t.questions || [])];
+        // Ensure each question has a unique ID
+        qs = qs.map((q, idx) => ({
+          ...q,
+          id: q.id || `q_${idx}_${Date.now()}`
+        }));
         if (t.randomize_questions) {
           qs = qs.sort(() => Math.random() - 0.5);
         }

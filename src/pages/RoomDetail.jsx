@@ -124,6 +124,7 @@ export default function RoomDetail() {
         </>,
         test.is_published ? 'Published' : 'Draft',
         test.questions?.length || 0,
+        new Date(test.created_date).toLocaleDateString(),
         <>
           <a href={createPageUrl('EditTest') + '?id=' + test.id} style={{ color: '#003366', marginRight: '10px' }}>Edit</a>
           <a href={createPageUrl('TestResults') + '?id=' + test.id} style={{ color: '#006600', marginRight: '10px' }}>Results</a>
@@ -140,6 +141,7 @@ export default function RoomDetail() {
       a.is_published ? 'Published' : 'Draft',
       a.questions?.length || 0,
       a.max_attempts || 1,
+      new Date(a.created_date).toLocaleDateString(),
       <>
         <a href={createPageUrl('EditAssignment') + '?id=' + a.id} style={{ color: '#003366', marginRight: '10px' }}>Edit</a>
         <a href={createPageUrl('AssignmentResults') + '?id=' + a.id} style={{ color: '#006600', marginRight: '10px' }}>Results</a>
@@ -317,7 +319,7 @@ export default function RoomDetail() {
                 </RetroButton>
               </div>
               <RetroTable
-                headers={['Title', 'Status', 'Questions', 'Actions']}
+                headers={['Title', 'Status', 'Questions', 'Created', 'Actions']}
                 rows={testRows}
                 emptyMessage="No tests created yet"
               />
@@ -332,7 +334,7 @@ export default function RoomDetail() {
                 </RetroButton>
               </div>
               <RetroTable
-                headers={['Title', 'Status', 'Questions', 'Max Attempts', 'Actions']}
+                headers={['Title', 'Status', 'Questions', 'Max Attempts', 'Created', 'Actions']}
                 rows={assignmentRows}
                 emptyMessage="No assignments created yet"
               />
