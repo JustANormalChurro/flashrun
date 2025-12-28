@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 import RetroButton from '@/components/RetroButton';
+import { createPageUrl } from '@/utils';
 
 export default function FloatingAI({ roomId, room }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,6 +9,9 @@ export default function FloatingAI({ roomId, room }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
+  const [showContentButtons, setShowContentButtons] = useState(false);
+  const [pendingIntent, setPendingIntent] = useState('');
+  const [expandedTools, setExpandedTools] = useState({});
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -50,19 +54,82 @@ export default function FloatingAI({ roomId, room }) {
     }
   };
 
-  const handleSend = async () => {
-    if (!input.trim() || !conversation || sending) return;
+  const handleSend = async (overrideMessage = null) => {
+    const messageToSend = overrideMessage || input;
+    if (!messageToSend.trim() || !conversation || sending) return;
 
     setSending(true);
-    const userMessage = input;
-    setInput('');
+    if (!overrideMessage) setInput('');
+    setShowContentButtons(false);
+
+    // Check if user wants to create content
+    const createKeywords = ['create', 'make', 'generate', 'build', 'new'];
+    const contentKeywords = ['test', 'assignment', 'announcement', 'quiz', 'exam'];
+    
+    const lowerMsg = messageToSend.toLowerCase();
+    const hasCreateIntent = createKeywords.some(k => lowerMsg.includes(k));
+    const hasContentType = contentKeywords.some(k => lowerMsg.includes(k));
+
+    if (hasCreateIntent && hasContentType && !overrideMessage) {
+      setPendingIntent(messageToSend);
+      setShowContentButtons(true);
+      setSending(false);
+      return;
+    }
 
     await base44.agents.addMessage(conversation, {
       role: 'user',
-      content: userMessage
+      content: messageToSend
     });
 
     setSending(false);
+  };
+
+  const handleContentTypeSelect = async (type) => {
+    setShowContentButtons(false);
+    setSending(true);
+    
+    const enhancedMessage = `${pendingIntent}\n\nIMPORTANT: Create a ${type} for room_id: ${roomId}. After creating the ${type}, you MUST create a Request record with:\n- room_id: ${roomId}\n- type: 'ai_generated'\n- content_id: (ID of ${type} you just created)\n- content_type: '${type}'\n- requester_id: 'ai'\n- requester_name: 'FlashRun AI'\n- title: (same as ${type} title)\n- status: 'pending'\n- changes_description: 'AI-generated ${type} ready for review'`;
+
+    await base44.agents.addMessage(conversation, {
+      role: 'user',
+      content: enhancedMessage
+    });
+
+    setPendingIntent('');
+    setSending(false);
+  };
+
+  const getToolSummary = (toolCall) => {
+    const name = toolCall?.name || '';
+    if (name.includes('create')) {
+      if (name.includes('Test')) return 'Created a new test';
+      if (name.includes('Assignment')) return 'Created a new assignment';
+      if (name.includes('Request')) return 'Registered content for review';
+    }
+    if (name.includes('read') || name.includes('filter')) return 'Retrieved classroom data';
+    if (name.includes('update')) return 'Updated content';
+    return 'Performed action';
+  };
+
+  const getCreatedContentId = (messages) => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const msg = messages[i];
+      if (msg.tool_calls) {
+        for (const tool of msg.tool_calls) {
+          if (tool.name && (tool.name.includes('Test.create') || tool.name.includes('Assignment.create'))) {
+            try {
+              const result = typeof tool.results === 'string' ? JSON.parse(tool.results) : tool.results;
+              if (result?.id) {
+                const type = tool.name.includes('Test') ? 'test' : 'assignment';
+                return { id: result.id, type };
+              }
+            } catch (e) {}
+          }
+        }
+      }
+    }
+    return null;
   };
 
   const handleKeyDown = (e) => {
@@ -202,8 +269,48 @@ export default function FloatingAI({ roomId, room }) {
               {msg.content}
             </div>
             {msg.tool_calls && msg.tool_calls.length > 0 && (
-              <div style={{ marginTop: '5px', fontSize: '9px', color: '#666', fontStyle: 'italic' }}>
-                [Performed {msg.tool_calls.length} action(s)]
+              <div style={{ marginTop: '5px' }}>
+                <div 
+                  onClick={() => setExpandedTools({...expandedTools, [i]: !expandedTools[i]})}
+                  style={{ 
+                    fontSize: '9px', 
+                    color: '#0066cc', 
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                    marginBottom: '3px'
+                  }}
+                >
+                  {expandedTools[i] ? '▼' : '►'} Performed {msg.tool_calls.length} action(s) - click to view
+                </div>
+                {expandedTools[i] && (
+                  <div style={{ fontSize: '9px', color: '#666', marginLeft: '10px', marginTop: '3px' }}>
+                    {msg.tool_calls.map((tool, idx) => (
+                      <div key={idx} style={{ marginBottom: '2px' }}>
+                        • {getToolSummary(tool)}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {msg.role === 'assistant' && !sending && (() => {
+                  const content = getCreatedContentId(messages.slice(0, i + 1));
+                  if (content) {
+                    const url = content.type === 'test' 
+                      ? createPageUrl('EditTest') + '?id=' + content.id
+                      : createPageUrl('EditAssignment') + '?id=' + content.id;
+                    return (
+                      <div style={{ marginTop: '5px' }}>
+                        <RetroButton 
+                          onClick={() => window.location.href = url}
+                          variant="success"
+                          style={{ padding: '3px 8px', fontSize: '9px' }}
+                        >
+                          View {content.type === 'test' ? 'Test' : 'Assignment'}
+                        </RetroButton>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
             )}
           </div>
@@ -212,6 +319,31 @@ export default function FloatingAI({ roomId, room }) {
         {sending && (
           <div style={{ padding: '8px', textAlign: 'center', color: '#666', fontStyle: 'italic' }}>
             FlashRun AI is thinking...
+          </div>
+        )}
+
+        {showContentButtons && (
+          <div style={{ 
+            padding: '10px', 
+            backgroundColor: '#ffffcc', 
+            border: '1px solid #cccc00',
+            borderRadius: '4px',
+            marginBottom: '10px'
+          }}>
+            <div style={{ fontSize: '10px', fontWeight: 'bold', marginBottom: '8px' }}>
+              What would you like to create?
+            </div>
+            <div style={{ display: 'flex', gap: '5px' }}>
+              <RetroButton onClick={() => handleContentTypeSelect('test')} style={{ padding: '4px 10px', fontSize: '10px' }}>
+                Test
+              </RetroButton>
+              <RetroButton onClick={() => handleContentTypeSelect('assignment')} style={{ padding: '4px 10px', fontSize: '10px' }}>
+                Assignment
+              </RetroButton>
+              <RetroButton onClick={() => handleContentTypeSelect('announcement')} style={{ padding: '4px 10px', fontSize: '10px' }}>
+                Announcement
+              </RetroButton>
+            </div>
           </div>
         )}
         
