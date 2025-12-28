@@ -219,7 +219,7 @@ export default function TakeAssignment() {
                 (Array.isArray(answers[q.id]) ? answers[q.id].length > 0 : answers[q.id] !== '');
               return (
                 <button
-                  key={q.id}
+                  key={i}
                   onClick={() => setCurrentQuestionIndex(i)}
                   style={{
                     width: '30px',

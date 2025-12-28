@@ -338,7 +338,7 @@ export default function TakeTest() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
             {questions.map((q, i) => (
               <button
-                key={q.id}
+                key={i}
                 onClick={() => goToQuestion(i)}
                 style={{
                   width: '30px',
