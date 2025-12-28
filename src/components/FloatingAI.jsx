@@ -22,64 +22,12 @@ export default function FloatingAI({ roomId, room }) {
 
   useEffect(() => {
     if (conversation) {
-      const unsubscribe = base44.agents.subscribeToConversation(conversation.id, async (data) => {
-        const newMessages = data.messages || [];
-        setMessages(newMessages);
-        
-        // Auto-create Request records when AI creates content
-        if (newMessages.length > 0) {
-          const lastMsg = newMessages[newMessages.length - 1];
-          if (lastMsg.role === 'assistant' && lastMsg.tool_calls) {
-            for (const tool of lastMsg.tool_calls) {
-              if (tool.status === 'completed' && tool.results) {
-                try {
-                  const result = typeof tool.results === 'string' ? JSON.parse(tool.results) : tool.results;
-                  
-                  if (tool.name && result?.id) {
-                    let contentType = null;
-                    let title = '';
-                    
-                    if (tool.name.includes('Test.create')) {
-                      contentType = 'test';
-                      title = result.title || 'AI-Generated Test';
-                    } else if (tool.name.includes('Assignment.create')) {
-                      contentType = 'assignment';
-                      title = result.title || 'AI-Generated Assignment';
-                    }
-                    
-                    if (contentType) {
-                      // Check if Request already exists
-                      const existingRequests = await base44.entities.Request.filter({ 
-                        content_id: result.id,
-                        room_id: roomId 
-                      });
-                      
-                      if (existingRequests.length === 0) {
-                        await base44.entities.Request.create({
-                          room_id: roomId,
-                          type: 'ai_generated',
-                          content_id: result.id,
-                          content_type: contentType,
-                          requester_id: 'ai',
-                          requester_name: 'FlashRun AI',
-                          title: title,
-                          status: 'pending',
-                          changes_description: `AI-generated ${contentType} ready for review`
-                        });
-                      }
-                    }
-                  }
-                } catch (e) {
-                  console.error('Error auto-creating Request:', e);
-                }
-              }
-            }
-          }
-        }
+      const unsubscribe = base44.agents.subscribeToConversation(conversation.id, (data) => {
+        setMessages(data.messages || []);
       });
       return () => unsubscribe();
     }
-  }, [conversation, roomId]);
+  }, [conversation]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -154,11 +102,19 @@ export default function FloatingAI({ roomId, room }) {
 
   const getToolSummary = (toolCall) => {
     const name = toolCall?.name || '';
-    if (name.includes('create')) {
-      if (name.includes('Test')) return 'Created a new test';
-      if (name.includes('Assignment')) return 'Created a new assignment';
-      if (name.includes('Request')) return 'Registered content for review';
-    }
+    try {
+      const result = typeof toolCall.results === 'string' ? JSON.parse(toolCall.results) : toolCall.results;
+      if (name.includes('Test.create') && result?.id) {
+        return `Created test: ${result.title || 'Untitled'}`;
+      }
+      if (name.includes('Assignment.create') && result?.id) {
+        return `Created assignment: ${result.title || 'Untitled'}`;
+      }
+      if (name.includes('Request.create')) {
+        return 'Registered content for review';
+      }
+    } catch (e) {}
+    
     if (name.includes('read') || name.includes('filter')) return 'Retrieved classroom data';
     if (name.includes('update')) return 'Updated content';
     return 'Performed action';
