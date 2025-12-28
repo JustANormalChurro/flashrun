@@ -54,13 +54,12 @@ export default function FloatingAI({ roomId, room }) {
     }
   };
 
-  const handleSend = async (overrideMessage = null) => {
-    const messageToSend = overrideMessage || input;
-    const msgStr = String(messageToSend);
-    if (!msgStr || !msgStr.trim() || !conversation || sending) return;
+  const handleSend = async () => {
+    const msgStr = String(input || '').trim();
+    if (!msgStr || !conversation || sending) return;
 
     setSending(true);
-    if (!overrideMessage) setInput('');
+    setInput('');
     setShowContentButtons(false);
 
     // Check if user wants to create content
@@ -71,7 +70,7 @@ export default function FloatingAI({ roomId, room }) {
     const hasCreateIntent = createKeywords.some(k => lowerMsg.includes(k));
     const hasContentType = contentKeywords.some(k => lowerMsg.includes(k));
 
-    if (hasCreateIntent && hasContentType && !overrideMessage) {
+    if (hasCreateIntent && hasContentType) {
       setPendingIntent(msgStr);
       setShowContentButtons(true);
       setSending(false);
