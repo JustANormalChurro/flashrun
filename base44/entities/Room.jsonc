@@ -1,0 +1,43 @@
+{
+  "name": "Room",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Classroom/Room name"
+    },
+    "teacher_name": {
+      "type": "string",
+      "description": "Teacher assigned to this room/period"
+    },
+    "description": {
+      "type": "string",
+      "description": "Room description"
+    },
+    "student_code": {
+      "type": "string",
+      "description": "Code for students to join"
+    },
+    "teacher_code": {
+      "type": "string",
+      "description": "Code for teacher collaboration"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "Teacher who created the room"
+    },
+    "collaborator_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Teacher IDs who can collaborate"
+    }
+  },
+  "required": [
+    "name",
+    "student_code",
+    "teacher_code",
+    "owner_id"
+  ]
+}

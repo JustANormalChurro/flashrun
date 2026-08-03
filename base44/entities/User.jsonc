@@ -1,0 +1,38 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "teacher_id": {
+      "type": "string",
+      "description": "Unique teacher access code"
+    },
+    "student_id": {
+      "type": "string",
+      "description": "Unique student ID for verification"
+    },
+    "user_type": {
+      "type": "string",
+      "enum": [
+        "teacher",
+        "student",
+        "superadmin"
+      ],
+      "description": "User type in the system"
+    },
+    "is_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether student has completed verification"
+    },
+    "designated_name": {
+      "type": "string",
+      "description": "Name assigned by super admin for verification"
+    }
+  },
+  "required": [
+    "teacher_id",
+    "student_id",
+    "user_type",
+    "designated_name"
+  ]
+}

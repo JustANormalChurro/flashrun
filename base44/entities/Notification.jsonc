@@ -1,0 +1,46 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "User receiving the notification"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "announcement",
+        "test",
+        "assignment"
+      ],
+      "description": "Type of notification"
+    },
+    "room_id": {
+      "type": "string",
+      "description": "Related room"
+    },
+    "room_name": {
+      "type": "string"
+    },
+    "content_id": {
+      "type": "string",
+      "description": "ID of announcement/test/assignment"
+    },
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "user_id",
+    "type",
+    "room_id",
+    "content_id"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "ChatMessage",
+  "type": "object",
+  "properties": {
+    "chatroom_id": {
+      "type": "string",
+      "description": "ID of the chat room"
+    },
+    "sender_id": {
+      "type": "string"
+    },
+    "sender_name": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "Attached file URL"
+    },
+    "file_name": {
+      "type": "string"
+    },
+    "is_edited": {
+      "type": "boolean",
+      "default": false
+    },
+    "edited_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "chatroom_id",
+    "sender_id",
+    "message"
+  ]
+}

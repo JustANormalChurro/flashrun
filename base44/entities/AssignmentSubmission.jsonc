@@ -1,0 +1,67 @@
+{
+  "name": "AssignmentSubmission",
+  "type": "object",
+  "properties": {
+    "assignment_id": {
+      "type": "string"
+    },
+    "room_id": {
+      "type": "string"
+    },
+    "student_id": {
+      "type": "string"
+    },
+    "student_name": {
+      "type": "string"
+    },
+    "attempt_number": {
+      "type": "number",
+      "default": 1
+    },
+    "answers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question_id": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "is_correct": {
+            "type": "boolean"
+          },
+          "time_spent_seconds": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "score": {
+      "type": "number"
+    },
+    "total_questions": {
+      "type": "number"
+    },
+    "is_complete": {
+      "type": "boolean",
+      "default": false
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "assignment_id",
+    "room_id",
+    "student_id"
+  ]
+}

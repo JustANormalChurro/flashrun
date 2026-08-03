@@ -1,0 +1,90 @@
+{
+  "name": "Assignment",
+  "type": "object",
+  "properties": {
+    "room_id": {
+      "type": "string",
+      "description": "Room this assignment belongs to"
+    },
+    "title": {
+      "type": "string",
+      "description": "Assignment title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Assignment description"
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "question_text": {
+            "type": "string"
+          },
+          "question_type": {
+            "type": "string",
+            "enum": [
+              "multiple_choice",
+              "short_answer",
+              "mix_match",
+              "essay",
+              "checkbox"
+            ]
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "correct_answer": {
+            "type": "string"
+          },
+          "correct_answers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "match_pairs": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "video_url": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "max_attempts": {
+      "type": "number",
+      "default": 1
+    },
+    "is_published": {
+      "type": "boolean",
+      "default": false
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "show_score_to_student": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether students can see their score after completing the assignment"
+    }
+  },
+  "required": [
+    "room_id",
+    "title"
+  ]
+}

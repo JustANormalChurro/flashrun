@@ -1,0 +1,43 @@
+{
+  "name": "ChatRoom",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Chat room name"
+    },
+    "description": {
+      "type": "string"
+    },
+    "room_code": {
+      "type": "string",
+      "description": "Unique code to join"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "Creator of the room"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "member_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "User IDs of members"
+    },
+    "banned_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "name",
+    "room_code",
+    "owner_id"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "name": "Request",
+  "type": "object",
+  "properties": {
+    "room_id": {
+      "type": "string",
+      "description": "Room this request belongs to"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "test_created",
+        "assignment_created",
+        "announcement_created",
+        "test_edited",
+        "assignment_edited",
+        "announcement_edited",
+        "ai_generated"
+      ],
+      "description": "Type of request"
+    },
+    "content_id": {
+      "type": "string",
+      "description": "ID of the test/assignment/announcement"
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "test",
+        "assignment",
+        "announcement"
+      ],
+      "description": "What type of content"
+    },
+    "requester_id": {
+      "type": "string",
+      "description": "User who made the change or 'ai' for AI-generated"
+    },
+    "requester_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the content"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected",
+        "reverted"
+      ],
+      "default": "pending",
+      "description": "Status of the request"
+    },
+    "changes_description": {
+      "type": "string",
+      "description": "Description of what was changed"
+    },
+    "original_data": {
+      "type": "object",
+      "description": "Original data before changes (for revert)"
+    }
+  },
+  "required": [
+    "room_id",
+    "type",
+    "content_type",
+    "requester_id",
+    "title"
+  ]
+}

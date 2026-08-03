@@ -1,0 +1,30 @@
+{
+  "name": "RoomMembership",
+  "type": "object",
+  "properties": {
+    "room_id": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "user_email": {
+      "type": "string"
+    },
+    "user_name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "student",
+        "teacher"
+      ]
+    }
+  },
+  "required": [
+    "room_id",
+    "user_id",
+    "role"
+  ]
+}
